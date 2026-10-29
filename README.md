@@ -111,7 +111,7 @@ Faces-in-Motion/
 **1. Clone the repository**
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+ https://github.com/Sumitdffff/Faces-in-Motion.git
 ```
 
 **2. Open the project folder**
