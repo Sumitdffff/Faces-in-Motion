@@ -168,5 +168,4 @@ npm run dev
 
 **Note:** Comments stored in `localStorage` are not shared between different visitors or devices. A backend such as Firebase, Supabase, or a custom API is required for shared comments.
 
- <img width="959" height="437" alt="Screenshot 2026-10-29 155706" src="https://github.com/user-attachments/assets/f3ccc8ec-8a21-4851-ac8f-65b7c76799cb" />
 
