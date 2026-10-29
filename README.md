@@ -148,7 +148,7 @@ npm run dev
       <img src="https://github.com/user-attachments/assets/e3f33f8d-77df-4c4c-8f14-21d48498cc51" width="500" alt="Interactive Portrait Gallery">
     </td>
     <td align="center">
-      <img  src="https://github.com/user-attachments/assets/418ecf46-4748-4cca-8514-fe1d6b1593c6"
+      <img src="https://github.com/user-attachments/assets/cfbb73f1-65da-4562-ba9d-059f71ccd7e3" 
         width="500" alt="Photo Details and Comments">
     </td>
   </tr>
