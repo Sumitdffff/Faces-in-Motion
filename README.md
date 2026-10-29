@@ -148,7 +148,8 @@ npm run dev
       <img src="https://github.com/user-attachments/assets/e3f33f8d-77df-4c4c-8f14-21d48498cc51" width="500" alt="Interactive Portrait Gallery">
     </td>
     <td align="center">
-      <img src="PASTE_SECOND_IMAGE_URL_HERE" width="500" alt="Photo Details and Comments">
+      <img  src="https://github.com/user-attachments/assets/418ecf46-4748-4cca-8514-fe1d6b1593c6"
+        width="500" alt="Photo Details and Comments">
     </td>
   </tr>
 </table>
