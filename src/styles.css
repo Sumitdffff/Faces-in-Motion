@@ -1,0 +1,162 @@
+/* Layout: one full-screen wall of tilted photo cards you drag in any direction; click a card to open it large. */
+:root {
+  --ink: #0b0a0a;
+  --ink-2: #151312;
+  --paper: #f1ece4;
+  --muted: #8d857b;
+  --line: rgba(241, 236, 228, .14);
+  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-ui: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-ui);
+  overflow: hidden;
+}
+.stage {
+  position: fixed; inset: 0;
+  overflow: hidden;
+  perspective: 1400px;
+  touch-action: none;
+  cursor: grab;
+  background: radial-gradient(120% 90% at 50% 40%, #181514 0%, var(--ink) 70%);
+}
+.stage.dragging { cursor: grabbing; }
+.grid {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+}
+.card {
+  position: absolute; left: 0; top: 0;
+  width: 200px; height: 280px;
+  border-radius: 14px;
+  background-size: cover; background-position: center;
+  background-color: var(--ink-2);
+  box-shadow: 0 18px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.vignette {
+  position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(90% 80% at 50% 50%, transparent 45%, rgba(11,10,10,.85) 100%);
+}
+.hint {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  padding: 9px 16px;
+  font-size: 13px; letter-spacing: .04em;
+  color: var(--muted);
+  background: rgba(21,19,18,.72);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity .6s ease;
+}
+.hint.gone { opacity: 0; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 20;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  background: rgba(8,7,7,.9);
+  backdrop-filter: blur(10px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .28s ease;
+  cursor: zoom-out;
+}
+.lightbox.open { opacity: 1; pointer-events: auto; }
+.lightbox .photo {
+  height: min(76vh, 740px);
+  aspect-ratio: 5 / 7;
+  max-width: calc(100vw - 120px);
+  border-radius: 16px;
+  background-size: cover; background-position: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,.7);
+  transform: scale(.88);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.lightbox.open .photo { transform: scale(1); }
+.viewer { display: flex; align-items: center; gap: 18px; }
+.nav {
+  font: inherit; font-size: 20px; line-height: 1;
+  width: 44px; height: 44px; flex: none;
+  color: var(--paper);
+  background: rgba(241,236,228,.08);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.nav:hover { background: rgba(241,236,228,.16); }
+.nav:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+.caption { margin: 0; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 0 16px; }
+.close {
+  position: absolute;
+  top: calc(18px + env(safe-area-inset-top, 0px));
+  right: max(18px, env(safe-area-inset-right, 0px));
+  font: inherit; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(241,236,228,.08);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+.close:hover { background: rgba(241,236,228,.16); }
+.close:focus-visible, .stage:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+  .viewer { gap: 8px; }
+  .nav { width: 36px; height: 36px; font-size: 16px; }
+  .lightbox .photo { max-width: calc(100vw - 100px); }
+  .card { width: 150px; height: 210px; border-radius: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lightbox, .lightbox .photo, .hint { transition: none; }
+}
+
+/* Headline over the wall. Ignores the pointer so dragging still works underneath. */
+.headline {
+  position: fixed; left: 0; right: 0;
+  top: 50%; transform: translateY(-50%);
+  z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px));
+  text-align: center;
+  pointer-events: none;
+  color: #fff;
+  transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.headline h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(56px, 12vw, 190px);
+  line-height: .9;
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.headline h1 { mix-blend-mode: difference; }
+.headline h1 em { font-style: italic; }
+.eyebrow, .sub {
+  margin: 0;
+  font-size: 12px; font-weight: 500;
+  letter-spacing: .32em; text-transform: uppercase;
+  text-shadow: 0 1px 14px rgba(0,0,0,.85), 0 0 3px rgba(0,0,0,.7);
+}
+.sub { letter-spacing: .2em; opacity: .8; }
+body:has(.stage.dragging) .headline {
+  opacity: .12;
+  transform: translateY(-50%) scale(.96);
+}
+.headline { animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(-46%); } to { opacity: 1; transform: translateY(-50%); } }
+body:has(.lightbox.open) .headline { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .headline { animation: none; transition: none; }
+}
